@@ -7,22 +7,28 @@
 
 import csv
 import os
+
+
+candidate_name = []
+#county_options = []
+#county_name = []
+#county_votes = {}
+
+
+#Assign a variable for the file to load and the path
+#file_to_load = os.path.join("resources", "election_results.csv")
+file_to_load = "C:\\Users\\Owner\\Desktop\\Classwork\\Mod3Python\\election_analysis\\Resources\\election_results.csv"
+file_to_save = os.path.join("analysis", "election_analysis.txt")
+
 total_votes = 0
-#candidate_name = 0
 candidate_options = []
 candidate_votes = {}
-county_options = []
-county_name = []
-county_votes = {}
-#vote_percentage = (candidate_votes / total_votes) * 100
 
 winning_candidate = ""
 winning_count = 0
 winning_percentage = 0
 
-#Assign a variable for the file to load and the path
-#file_to_load = os.path.join("resources", "election_results.csv")
-file_to_load = "C:\\Users\\Owner\\Desktop\\Classwork\\Mod3Python\\election_analysis\\Resources\\election_results.csv"
+
 #Open the election results and read the file
 with open(file_to_load) as election_data:
 
@@ -40,50 +46,47 @@ with open(file_to_load) as election_data:
             candidate_votes[candidate_name] = 0
         candidate_votes[candidate_name] += 1
 
+
+with open(file_to_save, "w") as txt_file:
+    election_results = (
+            f"\nElection Results\n"
+            f"--------------------\n"
+            f"Total Votes: {total_votes:,}\n"
+            f"--------------------\n")
+    print(election_results, end="")
+    txt_file.write(election_results)
+
+
     for candidate_name in candidate_votes: 
-        votes = candidate_votes[candidate_name]
-        vote_percentage = float(votes) / float(total_votes) * 100
-        print(f"{candidate_name} received {votes:,} votes, {vote_percentage:.1f}% of the vote.")
-        
-
-        if county_name not in county_options:
-            county_options.append(county_name)
-            county_votes[county_name] = 0
-        county_votes[county_name] += 1 
-        
+            votes = candidate_votes[candidate_name]
+            vote_percentage = float(votes) / float(total_votes) * 100
+            candidate_results = (
+                  f"{candidate_name} received {votes:,} votes, {vote_percentage:.1f}% of the vote.\n")
+            print(candidate_results)
+            txt_file.write(candidate_results)
 
 
-        if (votes > winning_count) and (vote_percentage > winning_percentage): 
-            winning_count = votes
-            winning_percentage = vote_percentage
-            winning_candidate = candidate_name
+            if (votes > winning_count) and (vote_percentage > winning_percentage): 
+                winning_count = votes
+                winning_percentage = vote_percentage
+                winning_candidate = candidate_name
 
 
-winning_candidate_summary = (
+    winning_candidate_summary = (
         f"----------------------\n"
         f"Winner: {winning_candidate}\n"
         f"Winning Vote Count: {winning_count:,}\n"
         f"Winning Percentage: {winning_percentage:.1f}%\n"
         f"----------------------\n")
-print(winning_candidate_summary)
-    
+    print(winning_candidate_summary)
+    txt_file.write(winning_candidate_summary)
             
 
-#print(winning_candidate)
-#print(candidate_options)
-#print(candidate_votes)
-#print(county_votes)
-#print(total_votes)
-#print(vote_percentage)
 
-file_to_save = os.path.join("analysis", "election_analysis.txt")
+        
+#election_results = f"The results are {winning_candidate_summary}"
 
-with open(file_to_save, "w") as txt_file:
-    election_results = f"The results are {winning_candidate_summary}"
-    txt_file.write(election_results)
-
-
-
+            
 #To do: Perform analysis
     print(election_data)
 
@@ -101,3 +104,7 @@ election_data.close()
 
 #Close the file
 #outfile.close()
+#if county_name not in county_options:
+            #county_options.append(county_name)
+            #county_votes[county_name] = 0
+#county_votes[county_name] += 1
